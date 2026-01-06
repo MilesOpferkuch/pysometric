@@ -16,12 +16,13 @@ class Scene:
     """
 
     def __init__(
-        self, frame: Polygon, grid_pitch: float, children: list[Renderable], origin="centroid", clip_to_frame=True
+        self, frame: Polygon, grid_pitch: float, children: list[Renderable], origin="centroid", clip_to_frame=True, show_hidden=False
     ):
         super().__init__()
         self.render_context = RenderContext(frame, grid_pitch, DIMETRIC_ANGLE, origin)
         self._children: list[Renderable] = children
         self.__clips_children_to_frame = clip_to_frame
+        self.show_hidden = show_hidden
 
     def compile(self) -> list[RenderableGeometry]:
         def flatten_compiled(renderables):
@@ -54,7 +55,8 @@ class Scene:
                 )
             )
             compiled.extend(clipped_and_compiled)
-
+        if self.show_hidden:
+            return compiled
         return self.__occlude(compiled)
 
     def render(self, vsk: vsketch.Vsketch):
