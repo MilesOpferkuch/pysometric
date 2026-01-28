@@ -28,7 +28,7 @@ class RenderContext:
     ----------
     frame : shapely.Polygon
     grid_pitch : float
-    dimetric_angle : float
+    depth_factor : float
     origin : Vector2 | str
     """
 
