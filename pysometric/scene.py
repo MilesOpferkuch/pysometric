@@ -16,14 +16,15 @@ class Scene:
     """
 
     def __init__(
-        self, frame: Polygon, grid_pitch: float, children: list[Renderable], origin="centroid", clip_to_frame=True, show_hidden=False
+        self, frame: Polygon, grid_pitch: float, children: list[Renderable], origin="centroid", clip_to_frame=True, show_hidden=False, dimetric_angle=radians(30)
     ):
         super().__init__()
-        self.render_context = RenderContext(frame, grid_pitch, DIMETRIC_ANGLE, origin)
+        self.dimetric_angle = dimetric_angle
+        self.render_context = RenderContext(frame, grid_pitch, self.dimetric_angle, origin)
         self._children: list[Renderable] = children
         self.__clips_children_to_frame = clip_to_frame
         self.show_hidden = show_hidden
-
+        
     def compile(self) -> list[RenderableGeometry]:
         def flatten_compiled(renderables):
             """
