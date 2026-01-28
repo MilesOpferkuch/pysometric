@@ -36,12 +36,12 @@ class RenderContext:
         self,
         frame: shapely.Polygon,
         grid_pitch: float,
-        dimetric_angle: float,
+        depth_factor: float,
         origin="centroid",
     ) -> None:
         self.frame = frame
         self.grid_pitch = grid_pitch
-        self.dimetric_angle = dimetric_angle
+        self.depth_factor = depth_factor
         self._origin = origin
 
     @property
@@ -58,21 +58,13 @@ def project_point(point: Vector3, render_context: RenderContext) -> Vector2:
     """
     Given a point in 3D space, project it to 2D screen coordinates.
     """
-    origin_x, origin_y = render_context.origin
-    grid_pitch = render_context.grid_pitch
-    dimetric_angle = render_context.dimetric_angle
-    grid_x, grid_y, grid_z = point
-    angle_cos = math.cos(dimetric_angle)
-    angle_sin = math.sin(dimetric_angle)
+    x, y, z = point
+    ox, oy = render_context.origin
+    s = render_context.grid_pitch
 
-    screen_x = (
-        origin_x - grid_y * grid_pitch * angle_cos + grid_x * grid_pitch * angle_cos
-    )
-    screen_y = (
-        origin_y
-        - grid_y * grid_pitch * angle_sin
-        - grid_x * grid_pitch * angle_sin
-        - grid_z * grid_pitch
-    )
+    depth = render_context.depth_factor
+
+    screen_x = ox + x * s + y * s * depth
+    screen_y = oy - z * s + y * s * depth
 
     return (screen_x, screen_y)
