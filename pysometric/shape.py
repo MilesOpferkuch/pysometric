@@ -171,6 +171,10 @@ class Polygon(Renderable):
         return [RenderableGeometry(polygon2d, self._layer)] + compiled_textures
 
     @property
+    def vertices(self):
+        return self._vertices
+
+    @property
     def textures(self) -> list[Texture]:
         return self._textures
 
